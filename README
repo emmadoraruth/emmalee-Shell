@@ -1,0 +1,75 @@
+Lee Kuhn, Emma Ziegellaub Eichler
+11/28/09
+
+**********Shell Project**********
+
+**********Compilation**********
+The repository contains a makefile. Run makefile to compile the project. The actual shell program is called emmalee.
+
+**********Features**********
+The emmalee shell implements:
+- Simple commands, including options.
+- The built-in commands "exit" and "cd" (including "cd~" to change to the user's home directory.)
+- Execution of multiple commands at once using separating semicolons.
+- Error reporting if a command is not found.
+- Basic redirection using ">" to redirect output and "<" to redirect input. The order of redirection does not matter, but redirection is limited to one input and one output redirection per command.
+- A single pipe ("|") will redirect the output of the command preceding it to the input of the command following it.
+- Extra spaces are ignored, including at the beginning and end of the input, as well as between commands or options of the input.
+
+**********Missing Features**********
+- Command line history.
+- Command line automatic completion.
+- Color coded output.
+- Some sort of ".bash_profile" or ".bashrc."
+
+**********Bugs**********
+- Behavior with more than two redirections or more than one pipe is unknown.
+- Extremely large numbers of commands strung together with semi-colons may cause bus errors.
+- The entire input is limited to 256 characters. Behavior when more than 256 characters are entered is unknown (likely a bus error).
+- Some abilities of bash's redirection are not implemented. "cat < ls" and "cat|ls" do not have defined behavior
+
+**********Function Headers**********
+
+*****parse*****
+
+Input: 
+-A pointer to a two-dimensional character array, "output"
+-Pointers to two strings: "input" and "delimeter"
+	  
+Description: Parses the characters in "input" by the delimeter, modifies output, filling it with the strings resulting from the parse.
+
+Ouput: An int, indicating whether any instances of the delimeter were found in "input"
+
+*****redirect*****
+
+Input: 
+-"command" in the form of a pointer to a two-dimensional character array
+-Two file names "infile" and "outfile", in the form of pointers to character arrays
+
+Description: Forks a child process, appropriately redirects STDIN and/or STDOUT, and executes "command."
+
+Output: void
+
+*****piped*****
+   
+Input: Two commands, "com1" and "com2" in the form of pointers to  two-dimensional character arrays
+
+Description: Calls redirect on "com1" with NULL as the infile and ".temp" as the outfile and calls redirect on "com2" with ".temp" as the infile and NULL as the outfile (thus directing STDOUT of "com1" to STDIN of "com2"); then removes .temp
+
+Output: void
+
+*****execute*****
+
+Input: A command, "b", in the form of a two-dimensional character array
+   
+Desccription: Forks a child process and executes command.
+
+Output: void
+
+*****main*****
+
+Input: none
+
+Description: Prompts user for input, interprets the input, and calls proper functions to execute the input.
+
+Output: 0
